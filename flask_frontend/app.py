@@ -14,15 +14,6 @@ def index():
     """
     return render_template("index.html")
 
-@app.route("/timeline")
-def timeline():
-    """
-    Fetch timeline events from Django API and render them.
-    """
-    resp = requests.get(f"{API_BASE}/events/")
-    events = resp.json() if resp.ok else []
-    return render_template("timeline.html", events=events)
-
 @app.route("/gallery")
 def gallery():
     """
