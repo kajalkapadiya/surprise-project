@@ -36,11 +36,6 @@ body {
     cursor: pointer
 }
 
-.timeline {
-    padding: 24px;
-    display: grid;
-    gap: 18px
-}
 
 .event-card {
     border-left: 4px solid var(--accent);
@@ -131,20 +126,6 @@ body {
 .card.flipped {
     transform: rotateY(180deg);
     transition: transform .35s
-}
-
-
-.timeline {
-    text-align: center;
-    padding: 40px;
-}
-
-.timeline-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    max-width: 600px;
-    margin: auto;
 }
 
 .event-card {
