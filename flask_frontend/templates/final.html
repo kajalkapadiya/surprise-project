@@ -619,16 +619,15 @@
             setInterval(createRosePetal, 3000);
 
             // Animate the stats with a delay
-            setTimeout(() => {
-                const stats = ['memoriesCreated', 'hugsShared'];
-                stats.forEach((id, index) => {
-                    setTimeout(() => {
-                        const element = document.getElementById(id);
-                        const target = id === 'memoriesCreated' ? 247 : 1543;
-                        animateCounter(element, target);
-                    }, index * 500);
-                });
-            }, 1000);
+            const statsWords = {
+                memoriesCreated: "Countless",
+                hugsShared: "Lots"
+            };
+
+            Object.keys(statsWords).forEach(id => {
+                const element = document.getElementById(id);
+                element.textContent = statsWords[id];
+            });
         };
     </script>
 </body>
