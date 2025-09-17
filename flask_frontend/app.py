@@ -25,13 +25,7 @@ def gallery():
 
 @app.route("/final")
 def final():
-    """
-    Fetch latest love letter from Django API.
-    """
-    resp = requests.get(f"{API_BASE}/letters/")
-    letters = resp.json() if resp.ok else []
-    letter = letters[0]["content"] if letters else "No letter yet."
-    return render_template("final.html", letter=letter)
+    return render_template("final.html")
 
 @app.route("/puzzle")
 def puzzle():
