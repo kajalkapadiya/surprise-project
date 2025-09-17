@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Well Do You Know Us? 💑</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+            font-family: 'Georgia', serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Floating Hearts Animation */
+        .heart {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 20px;
+            animation: floatHeart 8s infinite linear;
+            pointer-events: none;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Floating Balloons */
+        .balloon {
+            position: absolute;
+            width: 30px;
+            height: 40px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: floatBalloon 12s infinite linear;
+            pointer-events: none;
+        }
+
+        .balloon::after {
+            content: '';
+            position: absolute;
+            width: 1px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.5);
+            left: 50%;
+            bottom: -50px;
+            transform: translateX(-50%);
+        }
+
+        .balloon.pink {
+            background: #ff6b9d;
+            box-shadow: 0 0 20px rgba(255, 107, 157, 0.5);
+        }
+
+        .balloon.purple {
+            background: #c44569;
+            box-shadow: 0 0 20px rgba(196, 69, 105, 0.5);
+        }
+
+        .balloon.blue {
+            background: #4facfe;
+            box-shadow: 0 0 20px rgba(79, 172, 254, 0.5);
+        }
+
+        @keyframes floatBalloon {
+            0% {
+                transform: translateY(100vh) translateX(0px);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            50% {
+                transform: translateY(50vh) translateX(20px);
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100px) translateX(-20px);
+                opacity: 0;
+            }
+        }
+
+        /* Candle Flicker Effect */
+        .candle {
+            position: absolute;
+            width: 8px;
+            height: 40px;
+            background: #f4d03f;
+            border-radius: 4px;
+            animation: candleFlicker 2s infinite alternate;
+            pointer-events: none;
+        }
+
+        .candle::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 15px;
+            background: radial-gradient(circle, #ff6b35 30%, transparent 70%);
+            border-radius: 50%;
+            animation: flameFlicker 1.5s infinite alternate;
+        }
+
+        @keyframes candleFlicker {
+            0% {
+                transform: rotate(-1deg);
+            }
+
+            100% {
+                transform: rotate(1deg);
+            }
+        }
+
+        @keyframes flameFlicker {
+            0% {
+                transform: translateX(-50%) scale(1);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateX(-50%) scale(1.1);
+                opacity: 1;
+            }
+        }
+
+        /* Main Container */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .quiz-container {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            padding: 40px 30px;
+            border-radius: 25px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quiz-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 30%, rgba(255, 182, 193, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 105, 180, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .quiz-container h2 {
+            margin-bottom: 30px;
+            font-size: 2.2rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b9d, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        #quiz-question {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            line-height: 1.5;
+            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .quiz-container button {
+            display: block;
+            margin: 15px auto;
+            padding: 15px 25px;
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 85%;
+            color: white;
+            font-weight: 500;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quiz-container button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .quiz-container button:hover::before {
+            left: 100%;
+        }
+
+        .quiz-container button:hover {
+            background: linear-gradient(45deg, #ff6b9d, #c44569);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .quiz-container button:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        #quiz-result {
+            margin-top: 25px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            min-height: 50px;
+            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .final-result {
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            margin-top: 20px;
+        }
+
+        .final-result h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #feca57;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .score-text {
+            font-size: 1.5rem;
+            margin: 15px 0;
+            color: #ff6b9d;
+            font-weight: bold;
+        }
+
+        .love-message {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-top: 20px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .quiz-container {
+                margin: 10px;
+                padding: 25px 20px;
+            }
+
+            .quiz-container h2 {
+                font-size: 1.8rem;
+            }
+
+            #quiz-question {
+                font-size: 1.1rem;
+            }
+
+            .quiz-container button {
+                font-size: 1rem;
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Floating Hearts -->
+    <div class="heart" style="left: 10%; animation-delay: 0s;">💕</div>
+    <div class="heart" style="left: 20%; animation-delay: 2s;">💖</div>
+    <div class="heart" style="left: 30%; animation-delay: 4s;">💗</div>
+    <div class="heart" style="left: 40%; animation-delay: 1s;">💝</div>
+    <div class="heart" style="left: 50%; animation-delay: 3s;">💓</div>
+    <div class="heart" style="left: 60%; animation-delay: 5s;">💕</div>
+    <div class="heart" style="left: 70%; animation-delay: 1.5s;">💖</div>
+    <div class="heart" style="left: 80%; animation-delay: 3.5s;">💗</div>
+    <div class="heart" style="left: 90%; animation-delay: 2.5s;">💝</div>
+
+    <!-- Floating Balloons -->
+    <div class="balloon pink" style="left: 15%; animation-delay: 1s;"></div>
+    <div class="balloon purple" style="left: 35%; animation-delay: 3s;"></div>
+    <div class="balloon blue" style="left: 55%; animation-delay: 5s;"></div>
+    <div class="balloon pink" style="left: 75%; animation-delay: 2s;"></div>
+    <div class="balloon purple" style="left: 85%; animation-delay: 4s;"></div>
+
+    <!-- Candles -->
+    <div class="candle" style="left: 5%; top: 20%;"></div>
+    <div class="candle" style="right: 5%; top: 30%;"></div>
+    <div class="candle" style="left: 8%; bottom: 25%;"></div>
+    <div class="candle" style="right: 8%; bottom: 35%;"></div>
+
+    <div class="container">
+        <div class="quiz-container">
+            <h2>How Well Do You Know Us? 💑</h2>
+            <div id="quiz-box">
+                <p id="quiz-question">Loading...</p>
+                <div id="quiz-options"></div>
+                <p id="quiz-result"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                q: "When was the 1st day we met? 💕",
+                options: ["15th Nov 2023", "16th Nov 2023", "20th Nov 2023"],
+                correct: 1
+            },
+            {
+                q: "What was I wearing the 1st day we met?",
+                options: ["Red Top", "Red & White T-shirt", "Red & Black T-shirt"],
+                correct: 1
+            },
+            {
+                q: "Who said 'I love you' first (even if not real)? 😘",
+                options: ["You did 😉", "I did", "Both at the same time"],
+                correct: 0
+            },
+            {
+                q: "My favorite place to visit with you? 🌊",
+                options: ["Garden", "Riverfront", "Movie"],
+                correct: 1
+            },
+            {
+                q: "How do I sometimes call you (other than Nisarg)? 🥰",
+                options: ["Baby", "Jaan", "Darling"],
+                correct: 1
+            },
+            {
+                q: "Which food do we always end up sharing? 🍕",
+                options: ["Pizza", "Ice Cream", "Pani Puri"],
+                correct: 1
+            },
+            {
+                q: "What's our go-to date vibe? ❤️",
+                options: ["Movie + Popcorn", "Long Drive", "Coffee Date"],
+                correct: 0
+            },
+            {
+                q: "Which color do I secretly love on you? 🎨",
+                options: ["Black", "Blue", "White"],
+                correct: 0
+            },
+            {
+                q: "What do I do when you're upset? 😇",
+                options: ["Hug you tight", "Buy things", "Making food for you"],
+                correct: 0
+            },
+            {
+                q: "If I had to dedicate one word to us, it would be… 💖",
+                options: ["Forever", "Destiny", "Madness"],
+                correct: 0
+            },
+            {
+                q: "What's the first thing you notice about me every morning? Even i don't know the ans, but i'm guessing here. 🌅",
+                options: ["My sleepy smile", "My messy hair", "My eyes"],
+                correct: 2
+            },
+            {
+                q: "Which song makes me think of us? 🎵",
+                options: ["Perfect - Ed Sheeran", "Tumse milke Dil ka hai jo haal", "My Heart will go on- Titanic"],
+                correct: 0
+            },
+            {
+                q: "What's my biggest weakness when it comes to you? 😊",
+                options: ["Your laugh", "Your hugs/kisses", "Both"],
+                correct: 2
+            },
+            {
+                q: "If we could travel anywhere together, I'd choose? [Hint : Think about my fantacy. ] ✈️",
+                options: ["Paris", "Maldives", "Switzerland"],
+                correct: 0
+            },
+            {
+                q: "What do I love most about our relationship? 💫",
+                options: ["We never fight", "We understand each other", "We laugh together"],
+                correct: 1
+            }
+        ];
+
+        let currentQ = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            if (currentQ < questions.length) {
+                document.getElementById("quiz-question").innerText = questions[currentQ].q;
+                const optionsBox = document.getElementById("quiz-options");
+                optionsBox.innerHTML = "";
+
+                questions[currentQ].options.forEach((opt, i) => {
+                    const btn = document.createElement("button");
+                    btn.innerText = opt;
+                    btn.onclick = () => answer(i);
+                    optionsBox.appendChild(btn);
+                });
+                document.getElementById("quiz-result").innerText = "";
+            } else {
+                showFinalResult();
+            }
+        }
+
+        function answer(selected) {
+            const result = document.getElementById("quiz-result");
+            if (selected === questions[currentQ].correct) {
+                score++;
+                result.innerHTML = "🎉 Correct! You know me so well ❤️";
+                result.style.color = "#1b5e20";
+                result.style.textShadow = "0 0 10px rgba(76, 175, 80, 0.5)";
+            } else {
+                result.innerHTML = "😜 Oops, wrong… but I love you anyway!";
+                result.style.color = "#b71c1c";
+                result.style.textShadow = "0 0 10px rgba(255, 107, 157, 0.5)";
+            }
+
+            setTimeout(() => {
+                currentQ++;
+                loadQuestion();
+            }, 1500);
+        }
+
+        function showFinalResult() {
+            const box = document.getElementById("quiz-box");
+            let message = "";
+            let color = "";
+
+            if (score >= 13) {
+                message = "You're my soulmate! You remember everything about us 😍💕";
+                color = "#4CAF50";
+            } else if (score >= 10) {
+                message = "Aww, you know me really well! My heart is so full ❤️✨";
+                color = "#ff6b9d";
+            } else if (score >= 7) {
+                message = "You know me quite well, but there's always more to discover 💖";
+                color = "#feca57";
+            } else {
+                message = "Hehe, memory thodi weak hai… but love is strong! 😘💕";
+                color = "#c44569";
+            }
+
+            box.innerHTML = `
+                <div class="final-result">
+                    <h3>Quiz Complete! 🎊</h3>
+                    <p class="score-text">You scored ${score} / ${questions.length} 💖</p>
+                    <p class="love-message" style="color: ${color}">${message}</p>
+                    <div style="margin-top: 30px; font-size: 1.5rem;">
+                        💕 Thank you for being mine 💕
+                    </div>
+                    <!-- Romantic Navigation Button -->
+            <button 
+                onclick="window.location.href='{{ url_for('timeline') }}'"
+                style="
+                    margin-top: 40px;
+                    padding: 12px 28px;
+                    background: linear-gradient(135deg, #ff758c, #ff7eb3);
+                    border: none;
+                    border-radius: 50px;
+                    color: white;
+                    font-size: 1.2rem;
+                    font-weight: bold;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 8px 20px rgba(255, 118, 168, 0.4);
+                "
+                onmouseover="this.style.transform='scale(1.1)'"
+                onmouseout="this.style.transform='scale(1)'"
+            >
+                ✨ Are you ready for our Final Surprise? ✨
+            </button>
+                </div>
+            `;
+        }
+
+        // Create more floating hearts dynamically
+        function createFloatingHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = ['💕', '💖', '💗', '💝', '💓'][Math.floor(Math.random() * 5)];
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDelay = Math.random() * 8 + 's';
+            heart.style.fontSize = (Math.random() * 10 + 15) + 'px';
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 8000);
+        }
+
+        // Create hearts continuously
+        setInterval(createFloatingHeart, 2000);
+
+        window.onload = loadQuestion;
+    </script>
+</body>
+
+</html>

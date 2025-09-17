@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Your Bollywood Love Story 🎬</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: "Poppins", sans-serif;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .story-wrapper {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+        }
+
+        .story-slide {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            scroll-snap-align: start;
+            padding: 2rem;
+            animation: backgroundFade 10s infinite alternate;
+            background: linear-gradient(120deg, #ffdde1, #ee9ca7);
+        }
+
+        .story-content {
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .story-content h2 {
+            font-size: 2rem;
+            color: #e91e63;
+            margin-bottom: 1rem;
+        }
+
+        .story-content img {
+            width: 300px;
+            margin: 1rem auto;
+            display: block;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            animation: zoomIn 1.5s ease;
+        }
+
+        .story-content p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .story-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1.5rem;
+            z-index: 100;
+        }
+
+        .story-nav a {
+            background: linear-gradient(45deg, #e91e63, #9c27b0);
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .story-nav a:hover {
+            transform: translateY(-3px);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes backgroundFade {
+            from {
+                background: linear-gradient(120deg, #ffdde1, #ee9ca7);
+            }
+
+            to {
+                background: linear-gradient(120deg, #fbc2eb, #a6c1ee);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="story-wrapper">
+
+        <!-- Chapter 1 -->
+        <section class="story-slide">
+            <div class="story-content">
+                <h2>✨ Jab We Met -- The First Meeting</h2>
+                <img src="{{ url_for('static', filename='assets/photos/jabwemet.jpg') }}" alt="First Meeting">
+                <p>It was 16th November, the day our families decided we should meet. My heart was racing — I kept
+                    thinking, what if he doesn't like me? What if I don't like him? Will he have attitude?</p>
+                <p>When you entered my home with your family, my eyes kept searching for you. I tried to hide behind the
+                    kitchen wall, but still stole glances. And the moment our eyes met — just whow!..</p>
+            </div>
+        </section>
+
+        <!-- Chapter 2 -->
+        <section class="story-slide">
+            <div class="story-content">
+                <h2>💌 Kuch Kuch Hota Hai</h2>
+                <img src="{{ url_for('static', filename='assets/photos/kkhh.jpeg') }}" alt="Conversations">
+                <p>We sat outside to talk, just the two of us. You had no arrogance, no attitude — just pure kindness.
+                    You listened carefully, you laughed softly, you included me in every thought.</p>
+                <p>When I asked something, you not only answered but asked me the same back — making me feel equal,
+                    valued. I was secretly smiling inside, though I tried hard to hide it. That day, in half an hour, we
+                    shared a lifetime's worth of questions.</p>
+            </div>
+        </section>
+
+        <!-- Chapter 3 -->
+        <section class="story-slide">
+            <div class="story-content">
+                <h2>🙏 Hum Dil De Chuke Sanam – Prayers for Us</h2>
+                <img src="{{ url_for('static', filename='assets/photos/prayer.webp') }}" alt="Temple Prayer">
+                <p>There came a moment when I feared I might lose you just because of grade huh.. The thought of it
+                    broke me. I went to the temple
+                    — me, who rarely visits temples — and I prayed with all my heart.</p>
+                <p>With folded hands, I asked Shivji only one thing: Don't let him go away from me. That day, faith tied
+                    us together even stronger.</p>
+            </div>
+        </section>
+
+        <!-- Chapter 4 -->
+        <section class="story-slide">
+            <div class="story-content">
+                <h2>🎉 Kai Po Che! – The Best Utrayan Ever</h2>
+                <img src="{{ url_for('static', filename='assets/photos/uttrayan.webp') }}" alt="Kite Festival">
+                <p>Then came Utrayan — i celebrated for the first time with you. Flying kites with you, laughing,
+                    smiling,
+                    watching the sky fill with colors… but for me, the brightest color was you.</p>
+                <p>That day, I felt like I wasn't just flying kites — I was flying with happiness. and now i want to
+                    celebrate all the festivals with you.</p>
+            </div>
+        </section>
+
+        <!-- Chapter 5 -->
+        <section class="story-slide">
+            <div class="story-content">
+                <h2>💔 Ae Dil Hai Mushkil – The Pain of Goodbye</h2>
+                <img src="{{ url_for('static', filename='assets/photos/airport1.webp') }}" alt="Airport Goodbye">
+                <p>Your departure day came too soon. I tried hard not to cry, but tears betrayed me. You noticed, and in
+                    front of everyone, you took me upstairs, held my hand, and calmed me down.</p>
+                <p>In that moment, I realized — just holding your hand gave me peace. That goodbye was the hardest, yet
+                    it showed me how deeply we belonged to each other.</p>
+            </div>
+        </section>
+
+        <!-- Chapter 6 -->
+        <section class="story-slide">
+            <div class="story-content">
+                <h2>📱 Mujhse Dosti Karoge – Love Across Screens</h2>
+                <img src="{{ url_for('static', filename='assets/photos/longdistancecalling.jpg') }}" alt="Video Call">
+                <p>Days turned into months, and video calls became our lifeline. Every day, I waited eagerly for your
+                    call, just to see your smile. Our talks were filled with dreams, laughter, and sometimes silence
+                    that still felt comforting.</p>
+                <p>Slowly, those digital conversations became the most real thing in my life.</p>
+            </div>
+        </section>
+
+        <!-- Chapter 7 -->
+        <section class="story-slide">
+            <div class="story-content">
+                <h2>🌹 Dilwale Dulhania Le Jayenge – The Valentine's Surprise</h2>
+                <img src="{{ url_for('static', filename='assets/photos/surprisevisit.webp') }}">
+                <p>On 13th February, you gave me the biggest surprise of my life. When I entered home, you were there —
+                    with flowers in hand, on your knees, waiting for me.</p>
+                <p>For a moment, I thought it wasn't real. I was scared, confused, even ran away thinking it's a
+                    someone else!
+                    But it was you — my love, my everything. That day, my whole world turned magical.</p>
+            </div>
+        </section>
+
+        <!-- Chapter 8 -->
+        <section class="story-slide">
+            <div class="story-content">
+                <h2> 💞 Yeh Jawaani Hai Deewani – Days Full of Life</h2>
+                <img src="{{ url_for('static', filename='assets/photos/inmarriage.jpg') }}" alt="Happy Moments">
+                <p>Those 10–15 days you were in India became the most beautiful chapter of my life. We laughed, we
+                    teased, we fought playfully, we created unforgettable memories.</p>
+                <p>With you, even simple moments turned extraordinary. Life felt like an adventure — filled with fun,
+                    warmth, and love.</p>
+            </div>
+        </section>
+
+        <!-- Chapter 9 -->
+        <section class="story-slide">
+            <div class="story-content">
+                <h2>✈️ Kal Ho Naa Ho – The Second Goodbye</h2>
+                <img src="{{ url_for('static', filename='assets/photos/khnh.jpg') }}" alt="Airport Hug">
+                <p>But soon, the goodbye returned. At the airport, I hugged you tightly and cried, not wanting to let
+                    go. Watching you walk away broke me, but it also made me realize how strong our bond had become.</p>
+                <p>Even distance couldn't weaken what we had built.</p>
+            </div>
+        </section>
+
+
+        <!-- Chapter 10 -->
+        <section class="story-slide">
+            <div class="story-content">
+                <h2>💍 Band Baaja Baaraat – Our Forever</h2>
+                <img src="{{ url_for('static', filename='assets/photos/bandbajabarat.jpeg') }}" alt="Wedding">
+                <p>And now… December is near. My heart is counting days for you to return. On 5th January, we will no
+                    longer be "you and me" — we will be us, forever.</p>
+                <p>Every prayer, every tear, every smile has brought us to this moment. Soon, there will be no more
+                    goodbyes — only beginnings.</p>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Navigation -->
+    <div class="story-nav">
+        <a href="/">🏠 Home</a>
+        <a href="/puzzle">🧩 Puzzles</a>
+    </div>
+</body>
+
+</html>

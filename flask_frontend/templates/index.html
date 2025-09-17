@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Floating Balloons -->
+<div class="balloons">
+  <div class="balloon red" style="left: 15%; animation-delay: 0s;"></div>
+  <div class="balloon pink" style="left: 85%; animation-delay: 1s;"></div>
+  <div class="balloon purple" style="left: 50%; animation-delay: 2s;"></div>
+  <div class="balloon red" style="left: 25%; animation-delay: 3s;"></div>
+  <div class="balloon pink" style="left: 75%; animation-delay: 1.5s;"></div>
+</div>
+
+<!-- Flickering Candles -->
+<div class="candles">
+  <div class="candle" style="animation-delay: 0s;"></div>
+  <div class="candle" style="animation-delay: 0.5s;"></div>
+  <div class="candle" style="animation-delay: 1s;"></div>
+  <div class="candle" style="animation-delay: 1.5s;"></div>
+</div>
+
+<!-- Floating Hearts -->
+<div class="hearts"></div>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-content">
+    <h1 id="reveal-title" class="romantic-title fade-in">Happy Birthday, my love ❤️</h1>
+    <p id="sub" class="romantic-subtitle fade-in-delay">Made with code, memories, and all my heart.</p>
+    <button id="start-btn" class="romantic-btn pulse">✨ Open Your Surprise ✨</button>
+
+    <!-- Decorative Floating Emojis -->
+    <div class="floating-emoji emoji-1">💕</div>
+    <div class="floating-emoji emoji-2">🌹</div>
+    <div class="floating-emoji emoji-3">💖</div>
+    <div class="floating-emoji emoji-4">✨</div>
+  </div>
+</section>
+
+<!-- Romantic Quote -->
+<div class="romantic-quote">
+  <p>"Every love story is beautiful, but ours is my favorite" 💕</p>
+</div>
+
+<!-- Background Music -->
+<audio id="bgmusic" src="{{ url_for('static', filename='assets/music/bgmusic.mp3') }}" preload="auto" loop></audio>
+<div id="confetti-root"></div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Generate floating hearts
+  const hearts = document.querySelector('.hearts');
+  for (let i = 0; i < 15; i++) {
+    const heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.animationDuration = (4 + Math.random() * 4) + 's';
+    heart.style.animationDelay = Math.random() * 5 + 's';
+    hearts.appendChild(heart);
+  }
+
+  // Button click handler
+  document.getElementById('start-btn').addEventListener('click', () => {
+    // Play confetti effect
+    playConfetti();
+
+    // Play background music
+    const audio = document.getElementById('bgmusic');
+    try {
+      audio.play();
+    } catch (e) {
+      console.log("Music play failed:", e);
+    }
+
+    setTimeout(() => {
+      window.location.href = "{{ url_for('story') }}";
+    }, 1000);
+  });
+
+  // Simple confetti function
+  function playConfetti() {
+    const confettiRoot = document.getElementById('confetti-root');
+    const colors = ['#ff69b4', '#ff1493', '#ffd700', '#ffb6c1'];
+
+    for (let i = 0; i < 50; i++) {
+      const confetti = document.createElement('div');
+      confetti.style.position = 'fixed';
+      confetti.style.left = Math.random() * 100 + 'vw';
+      confetti.style.top = '-10px';
+      confetti.style.width = '10px';
+      confetti.style.height = '10px';
+      confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.animation = `confetti-fall 3s ease-out ${Math.random() * 2}s forwards`;
+      confetti.style.zIndex = '1000';
+      confettiRoot.appendChild(confetti);
+
+      setTimeout(() => confetti.remove(), 5000);
+    }
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{{ title or "For You" }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <style>
+    /* Romantic Navbar Styles */
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #fff0f5;
+      /* soft romantic background */
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      background: #ffeef4;
+      padding: 1rem 2rem;
+      border-bottom: 2px solid #ffd6e0;
+    }
+
+    .nav a {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      text-decoration: none;
+      font-weight: 500;
+      color: #7a3d52;
+      background: #fff;
+      padding: 0.6rem 1.2rem;
+      border-radius: 2rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .nav a:hover {
+      background: #ffb6c1;
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .nav a:active {
+      transform: scale(0.95);
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="nav">
+    <a href="{{ url_for('index') }}">🏠 Home</a>
+    <a href="{{ url_for('story') }}">📖 Our Story</a>
+    <a href="{{ url_for('puzzle') }}">🧩 Puzzle</a>
+    <a href="{{ url_for('typewriter') }}">💌 Letter</a>
+    <a href="{{ url_for('quiz') }}">❓ Quiz</a>
+    <!-- <a href="{{ url_for('timeline') }}">🌸 Journey</a> -->
+    <a href="{{ url_for('timeline') }}">📸 Gallery</a>
+    <a href="{{ url_for('final') }}">🎁 Final Surprise</a>
+  </nav>
+
+  <main id="app">
+    {% block content %}{% endblock %}
+  </main>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+
+</html>

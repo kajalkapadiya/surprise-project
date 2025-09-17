@@ -1,0 +1,520 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    body {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+        font-family: 'Georgia', serif;
+        overflow-x: hidden;
+        position: relative;
+    }
+
+    /* Floating Hearts Animation */
+    .heart {
+        position: absolute;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 20px;
+        animation: floatHeart 8s infinite linear;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    @keyframes floatHeart {
+        0% {
+            transform: translateY(100vh) rotate(0deg);
+            opacity: 0;
+        }
+
+        10% {
+            opacity: 1;
+        }
+
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-100px) rotate(360deg);
+            opacity: 0;
+        }
+    }
+
+    /* Floating Balloons */
+    .balloon {
+        position: absolute;
+        width: 30px;
+        height: 40px;
+        border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+        animation: floatBalloon 12s infinite linear;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .balloon::after {
+        content: '';
+        position: absolute;
+        width: 1px;
+        height: 50px;
+        background: rgba(255, 255, 255, 0.5);
+        left: 50%;
+        bottom: -50px;
+        transform: translateX(-50%);
+    }
+
+    .balloon.pink {
+        background: #ff6b9d;
+        box-shadow: 0 0 20px rgba(255, 107, 157, 0.5);
+    }
+
+    .balloon.purple {
+        background: #c44569;
+        box-shadow: 0 0 20px rgba(196, 69, 105, 0.5);
+    }
+
+    .balloon.blue {
+        background: #4facfe;
+        box-shadow: 0 0 20px rgba(79, 172, 254, 0.5);
+    }
+
+    @keyframes floatBalloon {
+        0% {
+            transform: translateY(100vh) translateX(0px);
+            opacity: 0;
+        }
+
+        10% {
+            opacity: 1;
+        }
+
+        50% {
+            transform: translateY(50vh) translateX(20px);
+        }
+
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-100px) translateX(-20px);
+            opacity: 0;
+        }
+    }
+
+    /* Candle Flicker Effect */
+    .candle {
+        position: fixed;
+        width: 8px;
+        height: 40px;
+        background: #f4d03f;
+        border-radius: 4px;
+        animation: candleFlicker 2s infinite alternate;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .candle::before {
+        content: '';
+        position: absolute;
+        top: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 12px;
+        height: 15px;
+        background: radial-gradient(circle, #ff6b35 30%, transparent 70%);
+        border-radius: 50%;
+        animation: flameFlicker 1.5s infinite alternate;
+    }
+
+    @keyframes candleFlicker {
+        0% {
+            transform: rotate(-1deg);
+        }
+
+        100% {
+            transform: rotate(1deg);
+        }
+    }
+
+    @keyframes flameFlicker {
+        0% {
+            transform: translateX(-50%) scale(1);
+            opacity: 0.8;
+        }
+
+        100% {
+            transform: translateX(-50%) scale(1.1);
+            opacity: 1;
+        }
+    }
+
+    /* Main Gallery Section */
+    .timeline {
+        position: relative;
+        z-index: 10;
+        padding: 40px 20px;
+        min-height: 100vh;
+    }
+
+    .timeline h2 {
+        text-align: center;
+        font-size: 3rem;
+        margin-bottom: 50px;
+        background: linear-gradient(45deg, #ff6b9d, #feca57);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        font-weight: bold;
+    }
+
+    .timeline-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 30px;
+        padding: 20px 0;
+    }
+
+    .event-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        border-radius: 25px;
+        padding: 25px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2),
+            0 0 0 1px rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        min-height: 200px;
+    }
+
+    .event-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at 30% 40%, rgba(255, 182, 193, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 70% 60%, rgba(255, 105, 180, 0.1) 0%, transparent 50%);
+        pointer-events: none;
+    }
+
+    .event-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 25px 50px rgba(255, 107, 157, 0.3),
+            0 0 0 1px rgba(255, 255, 255, 0.3);
+    }
+
+    .event-card h3 {
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+        color: #feca57;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        position: relative;
+        z-index: 2;
+    }
+
+    .event-card p {
+        margin-bottom: 12px;
+        line-height: 1.6;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        position: relative;
+        z-index: 2;
+    }
+
+    .event-card em {
+        color: #ff6b9d;
+        font-weight: bold;
+        font-style: normal;
+        font-size: 1.1rem;
+    }
+
+    /* Special styling for image cards */
+    .event-card.image-card {
+        min-height: 300px;
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+
+    .event-card.image-card::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(transparent 40%, rgba(0, 0, 0, 0.7));
+        pointer-events: none;
+    }
+
+    .event-card.image-card .content {
+        position: relative;
+        z-index: 3;
+        background: rgba(0, 0, 0, 0.3);
+        padding: 20px;
+        border-radius: 15px;
+        margin-top: auto;
+    }
+
+    /* No events message */
+    .no-events {
+        text-align: center;
+        color: white;
+        font-size: 1.5rem;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        padding: 40px;
+        border-radius: 20px;
+        margin: 50px auto;
+        max-width: 500px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Final Surprise Button */
+    .surprise-section {
+        position: relative;
+        z-index: 10;
+        text-align: center;
+        padding: 60px 20px;
+        margin-top: 50px;
+    }
+
+    .surprise-button {
+        display: inline-block;
+        padding: 20px 40px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: white;
+        background: linear-gradient(45deg, #ff6b9d, #c44569, #ff758c);
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        text-decoration: none;
+        box-shadow: 0 15px 35px rgba(255, 107, 157, 0.4),
+            0 0 0 2px rgba(255, 255, 255, 0.3);
+        position: relative;
+        overflow: hidden;
+        animation: pulseGlow 2s infinite;
+        text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .surprise-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.6s;
+    }
+
+    .surprise-button:hover::before {
+        left: 100%;
+    }
+
+    .surprise-button:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 25px 50px rgba(255, 107, 157, 0.6),
+            0 0 0 3px rgba(255, 255, 255, 0.4);
+        animation: none;
+    }
+
+    @keyframes pulseGlow {
+
+        0%,
+        100% {
+            box-shadow: 0 15px 35px rgba(255, 107, 157, 0.4),
+                0 0 0 2px rgba(255, 255, 255, 0.3);
+        }
+
+        50% {
+            box-shadow: 0 20px 40px rgba(255, 107, 157, 0.6),
+                0 0 0 4px rgba(255, 255, 255, 0.5),
+                0 0 30px rgba(255, 107, 157, 0.3);
+        }
+    }
+
+    .surprise-text {
+        color: white;
+        font-size: 1.3rem;
+        margin-bottom: 30px;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        border-radius: 15px;
+        display: inline-block;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .timeline h2 {
+            font-size: 2.2rem;
+        }
+
+        .timeline-container {
+            grid-template-columns: 1fr;
+            gap: 20px;
+            padding: 0 10px;
+        }
+
+        .event-card {
+            padding: 20px;
+            min-height: 150px;
+        }
+
+        .event-card h3 {
+            font-size: 1.5rem;
+        }
+
+        .surprise-button {
+            padding: 15px 30px;
+            font-size: 1.3rem;
+        }
+
+        .surprise-text {
+            font-size: 1.1rem;
+            padding: 15px;
+        }
+    }
+</style>
+
+<!-- Floating Hearts -->
+<div class="heart" style="left: 10%; animation-delay: 0s;">💕</div>
+<div class="heart" style="left: 20%; animation-delay: 2s;">💖</div>
+<div class="heart" style="left: 30%; animation-delay: 4s;">💗</div>
+<div class="heart" style="left: 40%; animation-delay: 1s;">💝</div>
+<div class="heart" style="left: 50%; animation-delay: 3s;">💓</div>
+<div class="heart" style="left: 60%; animation-delay: 5s;">💕</div>
+<div class="heart" style="left: 70%; animation-delay: 1.5s;">💖</div>
+<div class="heart" style="left: 80%; animation-delay: 3.5s;">💗</div>
+<div class="heart" style="left: 90%; animation-delay: 2.5s;">💝</div>
+
+<!-- Floating Balloons -->
+<div class="balloon pink" style="left: 15%; animation-delay: 1s;"></div>
+<div class="balloon purple" style="left: 35%; animation-delay: 3s;"></div>
+<div class="balloon blue" style="left: 55%; animation-delay: 5s;"></div>
+<div class="balloon pink" style="left: 75%; animation-delay: 2s;"></div>
+<div class="balloon purple" style="left: 85%; animation-delay: 4s;"></div>
+
+<!-- Candles -->
+<div class="candle" style="left: 5%; top: 20%;"></div>
+<div class="candle" style="right: 5%; top: 30%;"></div>
+<div class="candle" style="left: 8%; bottom: 25%;"></div>
+<div class="candle" style="right: 8%; bottom: 35%;"></div>
+
+<section class="timeline">
+    <h2>Our Journey Together 💕</h2>
+    <div class="timeline-container">
+        {% for e in events %}
+        <div class="event-card">
+            <h3>{{ e.title }} ✨</h3>
+            <p><em>{{ e.date }}</em></p>
+            <p>{{ e.description }}</p>
+        </div>
+        {% else %}
+        <div class="no-events">
+            <p>✨ No memories captured yet ✨</p>
+            <p style="margin-top: 15px; font-size: 1.2rem;">But our love story is just beginning! 💕</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Final Surprise Section -->
+<div class="surprise-section">
+    <div class="surprise-text">
+        🎁 Ready for something magical? 🎁<br>
+        Our journey has been beautiful so far...
+    </div>
+    <a href="/final-surprise" class="surprise-button">
+        ✨ Click for Final Surprise ✨
+    </a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Enhanced fade-in animation for each event
+    document.querySelectorAll('.event-card').forEach((card, i) => {
+        card.style.opacity = 0;
+        card.style.transform = 'translateY(50px) scale(0.9)';
+        setTimeout(() => {
+            card.style.transition = "all 1s ease";
+            card.style.opacity = 1;
+            card.style.transform = 'translateY(0) scale(1)';
+        }, i * 300);
+    });
+
+    // Create more floating hearts dynamically
+    function createFloatingHeart() {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.innerHTML = ['💕', '💖', '💗', '💝', '💓', '💘', '💞'][Math.floor(Math.random() * 7)];
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.animationDelay = Math.random() * 8 + 's';
+        heart.style.fontSize = (Math.random() * 10 + 15) + 'px';
+        document.body.appendChild(heart);
+
+        setTimeout(() => {
+            heart.remove();
+        }, 8000);
+    }
+
+    // Create hearts continuously
+    setInterval(createFloatingHeart, 2500);
+
+    // Add sparkle effect to surprise button
+    function createSparkle() {
+        const button = document.querySelector('.surprise-button');
+        if (!button) return;
+
+        const sparkle = document.createElement('div');
+        sparkle.innerHTML = '✨';
+        sparkle.style.position = 'absolute';
+        sparkle.style.color = 'white';
+        sparkle.style.pointerEvents = 'none';
+        sparkle.style.fontSize = '12px';
+        sparkle.style.animation = 'sparkleFloat 2s ease-out forwards';
+
+        const rect = button.getBoundingClientRect();
+        sparkle.style.left = (rect.left + Math.random() * rect.width) + 'px';
+        sparkle.style.top = (rect.top + Math.random() * rect.height) + 'px';
+
+        document.body.appendChild(sparkle);
+
+        setTimeout(() => {
+            sparkle.remove();
+        }, 2000);
+    }
+
+    // Add sparkle keyframes
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes sparkleFloat {
+            0% {
+                opacity: 1;
+                transform: translateY(0px) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.5);
+            }
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Create sparkles around the surprise button
+    setInterval(createSparkle, 1000);
+</script>
+{% endblock %}

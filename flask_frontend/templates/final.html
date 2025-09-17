@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Marry Me? 💍</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 30%, #16213e 60%, #0f3460 100%);
+            font-family: 'Georgia', serif;
+            overflow-x: hidden;
+            position: relative;
+            color: white;
+        }
+
+        /* Twinkling Stars */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        /* Floating Rose Petals */
+        .rose-petal {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #ff69b4;
+            border-radius: 50% 0;
+            animation: floatPetal 10s infinite linear;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        @keyframes floatPetal {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Golden Sparkles */
+        .sparkle {
+            position: absolute;
+            color: #ffd700;
+            font-size: 12px;
+            animation: sparkleMove 8s infinite ease-in-out;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        @keyframes sparkleMove {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+
+            50% {
+                transform: translateY(-200px) rotate(180deg);
+                opacity: 1;
+            }
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            padding: 20px;
+        }
+
+        /* Countdown Section */
+        .countdown-section {
+            text-align: center;
+            padding: 40px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .main-title {
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, #ffd700, #ff69b4, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            animation: titleGlow 3s ease-in-out infinite;
+            font-weight: bold;
+        }
+
+        @keyframes titleGlow {
+
+            0%,
+            100% {
+                filter: brightness(1);
+            }
+
+            50% {
+                filter: brightness(1.3);
+            }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin: 50px 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255, 215, 0, 0.1), rgba(255, 105, 180, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 215, 0, 0.6);
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: #ff69b4;
+            font-weight: 600;
+        }
+
+        /* Proposal Section */
+        .proposal-section {
+            text-align: center;
+            padding: 60px 20px;
+            max-width: 600px;
+            margin: 50px auto;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 30px;
+            border: 3px solid rgba(255, 215, 0, 0.4);
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
+            position: relative;
+        }
+
+        .proposal-section::before {
+            content: '💍';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 40px;
+            background: #0c0c0c;
+            padding: 10px;
+            border-radius: 50%;
+            border: 3px solid #ffd700;
+            animation: ringBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes ringBounce {
+
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+
+        .proposal-question {
+            font-size: 2.8rem;
+            margin: 40px 0 30px 0;
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            font-weight: bold;
+        }
+
+        .proposal-message {
+            font-size: 1.3rem;
+            color: #ff69b4;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .button-container {
+            position: relative;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .proposal-btn {
+            padding: 18px 35px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 20;
+        }
+
+        .yes-btn {
+            background: linear-gradient(45deg, #32cd32, #228b22);
+            color: white;
+            box-shadow: 0 10px 30px rgba(50, 205, 50, 0.4);
+        }
+
+        .yes-btn:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 15px 40px rgba(50, 205, 50, 0.6);
+        }
+
+        .no-btn {
+            background: linear-gradient(45deg, #ff4757, #ff3742);
+            color: white;
+            box-shadow: 0 10px 30px rgba(255, 71, 87, 0.4);
+            position: relative;
+            /* ✅ keeps it beside YES initially */
+            transition: all 0.3s ease;
+        }
+
+
+        .no-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            background: rgba(50, 205, 50, 0.1);
+            border: 2px solid rgba(50, 205, 50, 0.5);
+            border-radius: 25px;
+            margin-top: 30px;
+        }
+
+        .success-message h3 {
+            font-size: 2.5rem;
+            color: #32cd32;
+            margin-bottom: 20px;
+        }
+
+        .success-message p {
+            font-size: 1.3rem;
+            color: #ffd700;
+            line-height: 1.6;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.5rem;
+            }
+
+            .proposal-question {
+                font-size: 2.2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .proposal-btn {
+                padding: 15px 25px;
+                font-size: 1.2rem;
+            }
+
+            .button-container {
+                gap: 30px;
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Twinkling Stars -->
+    <div class="stars"></div>
+
+    <!-- Rose Petals -->
+    <div class="rose-petal" style="left: 10%; animation-delay: 0s;"></div>
+    <div class="rose-petal" style="left: 20%; animation-delay: 2s;"></div>
+    <div class="rose-petal" style="left: 30%; animation-delay: 4s;"></div>
+    <div class="rose-petal" style="left: 40%; animation-delay: 1s;"></div>
+    <div class="rose-petal" style="left: 50%; animation-delay: 3s;"></div>
+    <div class="rose-petal" style="left: 60%; animation-delay: 5s;"></div>
+    <div class="rose-petal" style="left: 70%; animation-delay: 1.5s;"></div>
+    <div class="rose-petal" style="left: 80%; animation-delay: 3.5s;"></div>
+    <div class="rose-petal" style="left: 90%; animation-delay: 2.5s;"></div>
+
+    <!-- Golden Sparkles -->
+    <div class="sparkle" style="left: 15%; top: 20%; animation-delay: 1s;">✨</div>
+    <div class="sparkle" style="left: 85%; top: 30%; animation-delay: 3s;">⭐</div>
+    <div class="sparkle" style="left: 25%; bottom: 40%; animation-delay: 2s;">✨</div>
+    <div class="sparkle" style="right: 20%; bottom: 30%; animation-delay: 4s;">⭐</div>
+
+    <div class="container">
+        <!-- Countdown Section -->
+        <div class="countdown-section">
+            <h1 class="main-title">Our Love Story ✨</h1>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="daysTogether">0</div>
+                    <div class="stat-label">Days Together 💕</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="daysToWedding">0</div>
+                    <div class="stat-label">Days to Wedding 👰‍♀️</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="memoriesCreated">A lot of</div>
+                    <div class="stat-label">Memories Created 📸</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="hugsShared">Peacefull</div>
+                    <div class="stat-label">Hugs Shared 🤗</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="kissesGiven">Without limit</div>
+                    <div class="stat-label">Kisses Given 💋</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="laughsTogether">∞</div>
+                    <div class="stat-label">Laughs Together 😂</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Proposal Section -->
+        <div class="proposal-section">
+            <div class="proposal-question">Will You Marry Me?</div>
+            <div class="proposal-message">
+                My dearest love, you've made every day brighter, every moment magical.
+                I can't imagine my life without you by my side.
+                Will you make me the happiest person alive?
+            </div>
+
+            <div class="button-container">
+                <button class="proposal-btn yes-btn" onclick="sayYes()">
+                    💍 YES! 💍
+                </button>
+                <button class="proposal-btn no-btn" id="noBtn" onclick="moveNoButton()">
+                    😔 No
+                </button>
+            </div>
+
+            <div class="success-message" id="successMessage">
+                <h3>🎉 You said YES! 🎉</h3>
+                <p>
+                    My heart is overflowing with joy! You've just made me the luckiest person in the world.
+                    I promise to love you, cherish you, and make you laugh every single day.
+                    Our adventure together is just beginning, my Handsome man! 💕
+                    <br><br>
+                    January 5th can't come soon enough! 👰‍♀️🤵‍♂️
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Calculate days together (from Nov 16, 2023)
+        function calculateDays() {
+            const startDate = new Date('2023-11-16');
+            const weddingDate = new Date('2025-01-05');
+            const today = new Date();
+
+            const daysTogether = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+            const daysToWedding = Math.floor((weddingDate - today) / (1000 * 60 * 60 * 24));
+
+            document.getElementById('daysTogether').textContent = daysTogether;
+            document.getElementById('daysToWedding').textContent = daysToWedding;
+        }
+
+        // Animate counting up
+        function animateCounter(element, target) {
+            let current = 0;
+            const increment = target / 50;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current);
+            }, 50);
+        }
+
+        // No button positions
+        const noPositions = [
+            { top: '20px', right: '50px' },
+            { bottom: '30px', left: '100px' },
+            { top: '50%', left: '20px' },
+            { bottom: '20px', right: '100px' },
+            { top: '30px', left: '50%' },
+            { bottom: '50%', right: '30px' },
+            { top: '70%', left: '80%' },
+            { bottom: '70%', left: '200px' }
+        ];
+        let noClickCount = 0;
+
+        function moveNoButton() {
+            const noBtn = document.getElementById('noBtn');
+            const position = noPositions[noClickCount % noPositions.length];
+
+            noBtn.style.position = 'fixed';
+            noBtn.style.top = position.top || 'auto';
+            noBtn.style.bottom = position.bottom || 'auto';
+            noBtn.style.left = position.left || 'auto';
+            noBtn.style.right = position.right || 'auto';
+            noBtn.style.transform = 'none';
+
+            // Add shake animation
+            noBtn.style.animation = 'shake 0.5s ease-in-out';
+
+            // Show playful messages
+            const messages = [
+                "😏 Nice try, but no escaping!",
+                "🙈 Come on, you know you want to say yes!",
+                "😂 The button will keep running!",
+                "💕 Your heart says yes, I know it!",
+                "🏃‍♂️ Catch me if you can!",
+                "😘 Just say yes already!",
+                "🎯 You can't avoid destiny!",
+                "💖 We both know the answer!"
+            ];
+
+            // Create floating message
+            const message = document.createElement('div');
+            message.textContent = messages[noClickCount % messages.length];
+            message.style.cssText = `
+                position: fixed;
+                top: ${position.top || position.bottom};
+                left: ${position.left || position.right};
+                color: #ff69b4;
+                font-size: 1.2rem;
+                font-weight: bold;
+                z-index: 30;
+                animation: fadeOut 3s ease-out forwards;
+                pointer-events: none;
+                text-shadow: 0 0 10px rgba(255, 105, 180, 0.8);
+            `;
+
+            document.body.appendChild(message);
+            setTimeout(() => message.remove(), 3000);
+
+            noClickCount++;
+        }
+
+        function sayYes() {
+            document.getElementById('successMessage').style.display = 'block';
+            document.querySelector('.button-container').style.display = 'none';
+
+            // Create celebration effect
+            createCelebration();
+        }
+
+        function createCelebration() {
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.innerHTML = ['💕', '💖', '💗', '💝', '💓', '💍', '🎉', '✨'][Math.floor(Math.random() * 8)];
+                    heart.style.cssText = `
+                        position: fixed;
+                        left: ${Math.random() * 100}%;
+                        top: ${Math.random() * 100}%;
+                        font-size: ${Math.random() * 20 + 20}px;
+                        animation: celebrationFloat 3s ease-out forwards;
+                        pointer-events: none;
+                        z-index: 50;
+                    `;
+                    document.body.appendChild(heart);
+                    setTimeout(() => heart.remove(), 3000);
+                }, i * 100);
+            }
+        }
+
+        // Generate twinkling stars
+        function createStars() {
+            const starsContainer = document.querySelector('.stars');
+            for (let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Create floating rose petals continuously
+        function createRosePetal() {
+            const petal = document.createElement('div');
+            petal.className = 'rose-petal';
+            petal.style.left = Math.random() * 100 + '%';
+            petal.style.animationDelay = '0s';
+            document.body.appendChild(petal);
+
+            setTimeout(() => {
+                petal.remove();
+            }, 10000);
+        }
+
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px); }
+                75% { transform: translateX(10px); }
+            }
+            @keyframes fadeOut {
+                0% { opacity: 1; transform: translateY(0); }
+                100% { opacity: 0; transform: translateY(-50px); }
+            }
+            @keyframes celebrationFloat {
+                0% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+                100% { opacity: 0; transform: translateY(-200px) scale(2) rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize everything
+        window.onload = function () {
+            calculateDays();
+            createStars();
+
+            // Start continuous rose petals
+            setInterval(createRosePetal, 3000);
+
+            // Animate the stats with a delay
+            setTimeout(() => {
+                const stats = ['memoriesCreated', 'hugsShared'];
+                stats.forEach((id, index) => {
+                    setTimeout(() => {
+                        const element = document.getElementById(id);
+                        const target = id === 'memoriesCreated' ? 247 : 1543;
+                        animateCounter(element, target);
+                    }, index * 500);
+                });
+            }, 1000);
+        };
+    </script>
+</body>
+
+</html>

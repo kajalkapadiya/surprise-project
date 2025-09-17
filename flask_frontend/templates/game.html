@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Unlock your surprise</h2>
+<p>Solve the memory match to reveal a secret.</p>
+<div id="game-root" class="game-grid"></div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/memory-game.js') }}"></script>
+{% endblock %}

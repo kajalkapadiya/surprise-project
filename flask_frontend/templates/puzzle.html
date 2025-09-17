@@ -1,0 +1,332 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        color: white;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+    }
+
+    h2 {
+        font-size: 2.2rem;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        text-align: center;
+    }
+
+    .puzzle-wrapper {
+        display: flex;
+        gap: 40px;
+        margin: 30px 0;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: flex-start;
+    }
+
+    .puzzle-board {
+        display: grid;
+        grid-template-columns: repeat(3, 120px);
+        grid-template-rows: repeat(3, 120px);
+        gap: 2px;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .puzzle-slot {
+        width: 120px;
+        height: 120px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px dashed rgba(255, 255, 255, 0.5);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+
+    .puzzle-slot.drag-over {
+        background: rgba(255, 255, 255, 0.3);
+        border-color: #4CAF50;
+        transform: scale(1.05);
+    }
+
+    .puzzle-pieces {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        max-width: 400px;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        justify-content: center;
+    }
+
+    .puzzle-piece {
+        width: 120px;
+        height: 120px;
+        cursor: grab;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+        background-size: 360px 360px !important;
+        background-repeat: no-repeat !important;
+        position: relative;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .puzzle-piece:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .puzzle-piece.placed {
+        cursor: not-allowed;
+        opacity: 0.9;
+        border-color: #4CAF50;
+    }
+
+    .success-message {
+        font-size: 1.6rem;
+        color: #4CAF50;
+        opacity: 0;
+        transition: all 0.5s ease;
+        transform: translateY(20px);
+        margin: 20px 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        text-align: center;
+    }
+
+    .success-message.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .progress-bar {
+        width: 300px;
+        height: 18px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #4CAF50, #8BC34A);
+        width: 50%;
+        transition: width 0.5s ease;
+        border-radius: 10px;
+    }
+</style>
+
+<div class="container">
+    <h2 id="puzzleTitle">Unlock Your Surprise 🎁</h2>
+    <p id="puzzleDesc" class="text-center">Drag and drop the pieces to complete the photo 💕</p>
+
+    <div class="puzzle-wrapper">
+        <div class="puzzle-game" id="puzzleGame"></div>
+        <div class="puzzle-pieces" id="puzzlePieces"></div>
+    </div>
+
+    <p id="successMessage" class="success-message">🎉 Puzzle complete!</p>
+    <div class="progress-bar">
+        <div id="progressFill" class="progress-fill"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    class PuzzleGame {
+        constructor() {
+            this.currentPuzzle = 0;
+            this.puzzles = [
+                {
+                    img: "{{ url_for('static', filename='assets/photos/puzzle1.png') }}",
+                    title: "🔥 Guess this beauty… can you put her back together?",
+                    desc: "Maybe the face of your dream girl? Let’s see if you can rebuild her 😉",
+                    success: "💃 You did it! The gorgeous mystery is revealed!"
+                },
+                {
+                    img: "{{ url_for('static', filename='assets/photos/puzzle2.png') }}",
+                    title: "😎 A handsome face is hidden here…",
+                    desc: "Strong jawline? Charming smile? Solve & see who he is 👀",
+                    success: "🔥 Nice! The man of style is complete!"
+                },
+                {
+                    img: "{{ url_for('static', filename='assets/photos/puzzle3.jpeg') }}",
+                    title: "💞 Two souls, one frame…",
+                    desc: "Put us back together – we belong side by side ❤️",
+                    success: "🎉 Perfect! Love is whole again 💑"
+                }
+            ];
+            this.gridSize = 3;
+            this.pieces = [];
+            this.slots = [];
+            this.draggedPiece = null;
+            this.completedPieces = 0;
+            this.init();
+        }
+
+        init() {
+            this.loadPuzzle(this.currentPuzzle);
+            this.bindEvents();
+            this.updateProgress();
+        }
+
+        bindEvents() {
+            document.addEventListener('dragstart', e => {
+                if (e.target.classList.contains('puzzle-piece')) {
+                    this.draggedPiece = e.target;
+                    e.target.style.opacity = '0.5';
+                }
+            });
+
+            document.addEventListener('dragend', e => {
+                if (e.target.classList.contains('puzzle-piece')) {
+                    e.target.style.opacity = '1';
+                }
+                this.draggedPiece = null;
+            });
+        }
+
+        createPuzzleSlots(boardId) {
+            const gameContainer = document.getElementById('puzzleGame');
+            gameContainer.innerHTML = '';
+
+            const board = document.createElement('div');
+            board.className = 'puzzle-board';
+            board.id = boardId;
+
+            const slots = [];
+
+            for (let i = 0; i < this.gridSize * this.gridSize; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'puzzle-slot';
+                slot.dataset.position = i;
+
+                slot.addEventListener('dragover', this.handleDragOver.bind(this));
+                slot.addEventListener('dragenter', this.handleDragEnter.bind(this));
+                slot.addEventListener('dragleave', this.handleDragLeave.bind(this));
+                slot.addEventListener('drop', this.handleDrop.bind(this));
+
+                board.appendChild(slot);
+                slots.push(slot);
+            }
+
+            gameContainer.appendChild(board);
+            this.slots = slots;
+        }
+
+        loadPuzzle(index) {
+            const puzzle = this.puzzles[index];
+            document.getElementById('puzzleTitle').innerText = puzzle.title;
+            document.getElementById('puzzleDesc').innerText = puzzle.desc;
+
+            this.createPuzzleSlots(`puzzleBoard${index}`);
+
+            const img = new Image();
+            img.crossOrigin = "anonymous";
+
+            img.onload = () => this.createPuzzlePieces(img);
+            img.src = puzzle.img;
+        }
+
+        createPuzzlePieces(img) {
+            const pieceSize = 120;
+            this.pieces = [];
+            const container = document.getElementById('puzzlePieces');
+            container.innerHTML = '';
+
+            for (let y = 0; y < this.gridSize; y++) {
+                for (let x = 0; x < this.gridSize; x++) {
+                    const index = y * this.gridSize + x;
+                    const piece = document.createElement('div');
+                    piece.className = 'puzzle-piece';
+                    piece.draggable = true;
+                    piece.dataset.index = index;
+                    piece.style.width = `${pieceSize}px`;
+                    piece.style.height = `${pieceSize}px`;
+                    piece.style.backgroundImage = `url(${img.src})`;
+                    piece.style.backgroundPosition = `-${x * pieceSize}px -${y * pieceSize}px`;
+                    piece.style.backgroundSize = `${this.gridSize * pieceSize}px ${this.gridSize * pieceSize}px`;
+                    this.pieces.push(piece);
+                }
+            }
+
+            this.pieces.sort(() => Math.random() - 0.5);
+            this.pieces.forEach(piece => container.appendChild(piece));
+            this.completedPieces = 0;
+        }
+
+        handleDragOver(e) { e.preventDefault(); }
+        handleDragEnter(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+        handleDragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
+
+        handleDrop(e) {
+            e.preventDefault();
+            if (!this.draggedPiece) return;
+
+            const slot = e.currentTarget;
+            slot.classList.remove('drag-over');
+
+            const pieceIndex = parseInt(this.draggedPiece.dataset.index);
+            const slotIndex = parseInt(slot.dataset.position);
+
+            if (pieceIndex === slotIndex) {
+                if (slot.children.length === 0) {
+                    slot.appendChild(this.draggedPiece);
+                    this.draggedPiece.draggable = false;
+                    this.draggedPiece.classList.add('placed');
+                    this.completedPieces++;
+                    if (this.completedPieces === this.gridSize * this.gridSize) {
+                        this.showSuccess();
+                    }
+                }
+            }
+        }
+
+        showSuccess() {
+            const msg = document.getElementById('successMessage');
+            msg.innerText = this.puzzles[this.currentPuzzle].success;
+            msg.classList.add('show');
+
+            setTimeout(() => {
+                msg.classList.remove('show');
+                if (this.currentPuzzle < this.puzzles.length - 1) {
+                    this.currentPuzzle++;
+                    this.updateProgress();
+                    setTimeout(() => this.loadPuzzle(this.currentPuzzle), 500);
+                } else {
+                    window.location.href = "{{ url_for('typewriter') }}";
+                }
+            }, 2000);
+        }
+
+        updateProgress() {
+            const progressFill = document.getElementById('progressFill');
+            const progress = ((this.currentPuzzle + 1) / this.puzzles.length) * 100;
+            progressFill.style.width = `${progress}%`;
+        }
+    }
+
+    window.addEventListener('load', () => new PuzzleGame());
+</script>
+{% endblock %}
