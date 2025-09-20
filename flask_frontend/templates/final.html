@@ -450,17 +450,45 @@
 
     <script>
         // Calculate days together (from Nov 16, 2023)
+        // function calculateDays() {
+        //     const startDate = new Date('2023-11-16');
+        //     const weddingDate = new Date('2025-01-05');
+        //     const today = new Date();
+
+        //     const daysTogether = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+        //     const daysToWedding = Math.floor((weddingDate - today) / (1000 * 60 * 60 * 24));
+
+        //     document.getElementById('daysTogether').textContent = daysTogether;
+        //     document.getElementById('daysToWedding').textContent = daysToWedding;
+        // }
+
         function calculateDays() {
-            const startDate = new Date('2023-11-16');
-            const weddingDate = new Date('2025-01-05');
-            const today = new Date();
+            // Use local date constructor: new Date(year, monthIndex, day)
+            // monthIndex is 0-based (0 = Jan, 10 = Nov)
+            const startDate = new Date(2023, 10, 16);   // Nov 16, 2023
+            const weddingDate = new Date(2025, 0, 5);   // Jan 5, 2025
 
-            const daysTogether = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
-            const daysToWedding = Math.floor((weddingDate - today) / (1000 * 60 * 60 * 24));
+            // Today's local date at midnight (no time-of-day)
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
+            const msPerDay = 24 * 60 * 60 * 1000;
+
+            // daysTogether: inclusive count (so on start date => 1)
+            let daysTogether = Math.floor((today - startDate) / msPerDay) + 1;
+            if (daysTogether < 0) daysTogether = 0; // not started yet
+
+            // daysToWedding: days remaining (0 if wedding is today or already passed)
+            // use Math.ceil so partial days count as "1 day left" until midnight
+            let daysToWedding = Math.ceil((weddingDate - today) / msPerDay);
+            if (daysToWedding < 0) daysToWedding = 0;
+
+            // Optional display tweak: show "Today!" when wedding is today
             document.getElementById('daysTogether').textContent = daysTogether;
-            document.getElementById('daysToWedding').textContent = daysToWedding;
+            document.getElementById('daysToWedding').textContent =
+                daysToWedding === 0 ? 'Today!' : daysToWedding;
         }
+
 
         // Animate counting up
         function animateCounter(element, target) {
